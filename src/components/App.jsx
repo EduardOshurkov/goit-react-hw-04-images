@@ -1,16 +1,33 @@
-export const App = () => {
-  return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      React homework template
-    </div>
-  );
-};
+import React from "react";
+import { ToastContainer } from 'react-toastify';
+import Searchbar from "./Searchbar/Searchbar";
+import SearchInfo from "./SearchInfo/SearchInfo";
+
+
+
+
+export class App extends React.Component {
+  state = {
+    requestValue: '',
+  }
+  
+  handleFormSubmit = requestValue => {
+    this.setState({ requestValue })
+  }
+
+  render() {
+    return (
+      <div>
+        <Searchbar onSubmit={this.handleFormSubmit} />
+        <SearchInfo requestValue={this.state.requestValue}/>
+
+
+
+
+        <ToastContainer autoClose={3000}/>
+     </div>
+   )
+  }
+}
+
+
