@@ -1,7 +1,7 @@
-// export default function LoadMoreBtn({ClickToNextPage}) {
-//     return (
-//         <div>
-//             <button type="button" onClick={ClickToNextPage}>Load more</button>
-//         </div>
-//     )
-// }
+export default function LoadMoreBtn({onLoadMore}) {
+    return (
+        <div>
+            <button type="button" onClick={onLoadMore}>Load more</button>
+        </div>
+    )
+}

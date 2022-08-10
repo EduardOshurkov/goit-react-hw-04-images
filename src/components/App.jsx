@@ -3,9 +3,8 @@ import {Component} from "react";
 import { Searchbar } from "./Searchbar/Searchbar";
 import * as api from './api/api';
 import ImageGallery from "./ImageGallery/ImageGallery";
-// // import SearchInfo from "./SearchInfo/SearchInfo";
-// // import LoadMoreBtn from "./Button/Button";
-// import { FetchImages } from "./api/api";
+import LoadMoreBtn from "./Button/Button";
+import Loader from "./Loader/Loader";
 
 
 
@@ -14,7 +13,6 @@ export class App extends Component {
         query: '',
         page: 1,
         images: [],
-        isVisible: false,
         isLoading: false,
         isEmpty: false,
     }
@@ -32,7 +30,7 @@ export class App extends Component {
             isLoading: true,
         })
         try {
-            const { hits, totalHits, page: currentPage } = await api.getImages(query, page);
+            const { hits } = await api.getImages(query, page);
             if (hits.length === 0) {
                 this.setState({
                     isEmpty: true,
@@ -40,7 +38,6 @@ export class App extends Component {
             }
             this.setState(prevState => ({
                 images: [...prevState.images, ...hits],
-                isVisible: currentPage < Math.ceil(totalHits/hits.length),
             }))
         } catch (error) {
             console.error(error);
@@ -77,13 +74,17 @@ export class App extends Component {
     }
 
     render() {
-        const { images, isVisible, isEmpty } = this.state;
+        const { images, isEmpty, isLoading, page } = this.state;
+
+        const isNotLastPage = images.length / page === 12;
+        const btnEnable = images.length > 0 && !isLoading && isNotLastPage;
         return (
             <div>
                 <Searchbar onSubmit={this.onHandleSubmit} />
                 {isEmpty && <h1>Error no images</h1>}
-                <ul>{images.length > 0 && images.map(({ id, webformatURL, largeImageURL }) => (<li key={id}><img src={webformatURL} alt='#' width='220px' /></li>))}</ul>
-                {isVisible && <button onClick={this.onLoadMore}>Load more</button>}
+                <ImageGallery images={images} />
+                {btnEnable && <LoadMoreBtn onLoadMore={this.onLoadMore} />}
+                {isLoading && <Loader/>}
             </div>
         )
     }

@@ -3,12 +3,15 @@
 import ImageGalleryItem from "components/ImageGalleryItem/ImageGalleryItem";
 
 
-export default function ImageGallery({}) {
-    return (
-        <div>
-        <ul className="gallery">
-            {/* <ImageGalleryItem request={request}/> */}
-            </ul>
-            </div>
-    )
-}
+
+ const ImageGallery = ({ images, onClickModal }) => {
+
+  return (<>
+    <ul className="ImageGallery">
+          {images?.map(item => (<ImageGalleryItem key={item.id} item={item} onClickModal={onClickModal}/>)
+      )}
+</ul></>
+  )
+ }
+
+export default ImageGallery;
