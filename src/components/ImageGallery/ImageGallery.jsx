@@ -1,13 +1,14 @@
-import ImageGalleryItem from "components/ImageGalleryItem/ImageGalleryItem";
-import LoadMoreBtn from "components/Button/Button";
 
-export default function ImageGallery({request, ClickToNextPage}) {
+
+import ImageGalleryItem from "components/ImageGalleryItem/ImageGalleryItem";
+
+
+export default function ImageGallery({}) {
     return (
         <div>
         <ul className="gallery">
-            <ImageGalleryItem request={request}/>
+            {/* <ImageGalleryItem request={request}/> */}
             </ul>
-            <LoadMoreBtn ClickToNextPage={ClickToNextPage} />
             </div>
     )
 }
