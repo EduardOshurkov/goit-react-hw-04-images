@@ -1,12 +1,12 @@
+import { Li, Img } from "./ImageGalleryItem.styled";
 
 
-
-const ImageGalleryItem = ( {item, onClickModal} ) => {
+const ImageGalleryItem = ( {item, onClickModal, } ) => {
     const { id, webformatURL, largeImageURL } = item;
     return (
         <div>
-            <li key={id} onClickModal={() => onClickModal(largeImageURL)}>
-                <img src={webformatURL} alt="#" width='220px'/></li>
+            <Li key={id}>
+                <Img src={webformatURL} data-image={largeImageURL} onClick={() => onClickModal(largeImageURL)} loading="lazy" alt={item.tags} /></Li>
        </div>
     )
 }

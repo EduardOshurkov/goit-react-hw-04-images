@@ -1,17 +1,19 @@
-
+import Gallery from "./ImageGallery.styled";
 
 import ImageGalleryItem from "components/ImageGalleryItem/ImageGalleryItem";
 
 
 
- const ImageGallery = ({ images, onClickModal }) => {
+ const ImageGallery = ({ images, onImgClick }) => {
 
   return (<>
-    <ul className="ImageGallery">
-          {images?.map(item => (<ImageGalleryItem key={item.id} item={item} onClickModal={onClickModal}/>)
+    <Gallery className="ImageGallery">
+          {images?.map(item => (<ImageGalleryItem key={item.id} item={item} onClickModal={onImgClick}/>)
       )}
-</ul></>
+</Gallery></>
   )
  }
 
 export default ImageGallery;
+
+

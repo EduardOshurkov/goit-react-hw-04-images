@@ -1,10 +1,11 @@
 import {Component} from "react";
-// // import { ToastContainer } from 'react-toastify';
+import Container from "./App.styled";
 import { Searchbar } from "./Searchbar/Searchbar";
 import * as api from './api/api';
 import ImageGallery from "./ImageGallery/ImageGallery";
 import LoadMoreBtn from "./Button/Button";
 import Loader from "./Loader/Loader";
+import Modal from "./Modal/Modal";
 
 
 
@@ -15,8 +16,16 @@ export class App extends Component {
         images: [],
         isLoading: false,
         isEmpty: false,
+        showModal: false,
+        ModalContent: null,
     }
 
+
+    onClickCard = (event) => {
+        this.setState({
+            ModalContent: event.target.dataset.id
+        })
+    }
 
     componentDidUpdate(_, prevState) {
         const { query, page } = this.state;
@@ -73,22 +82,31 @@ export class App extends Component {
         }))
     }
 
+    togleModal = (image) => {
+        this.setState(({ showModal }) => ({
+            showModal: !showModal,
+            ModalContent: image
+        }));
+    };
+
     render() {
-        const { images, isEmpty, isLoading, page } = this.state;
+        const { images, isEmpty, isLoading, page, showModal, ModalContent } = this.state;
 
         const isNotLastPage = images.length / page === 12;
         const btnEnable = images.length > 0 && !isLoading && isNotLastPage;
         return (
-            <div>
+            <Container>
                 <Searchbar onSubmit={this.onHandleSubmit} />
-                {isEmpty && <h1>Error no images</h1>}
-                <ImageGallery images={images} />
+                {isEmpty && <h1>Sory no images, try again</h1>}
+                <ImageGallery images={images} onImgClick={this.togleModal}/>
                 {btnEnable && <LoadMoreBtn onLoadMore={this.onLoadMore} />}
-                {isLoading && <Loader/>}
-            </div>
+                {isLoading && <Loader />}
+                {showModal && (<Modal onClose={this.togleModal}><img src={ModalContent} alt={images} /></Modal>)}
+            </Container>
         )
     }
 }
+
 
 
 

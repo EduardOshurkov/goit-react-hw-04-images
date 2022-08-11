@@ -1,4 +1,6 @@
 import { Component } from "react";
+import { Input, ButtonLabel, Button, Form, Header } from "./Searchbar.styled";
+
 
 
 export class Searchbar extends Component {
@@ -26,13 +28,13 @@ export class Searchbar extends Component {
     render() {
         const { query } = this.state;
         return (
-            <header className="searchbar">
-                <form className="form" onSubmit={this.onHandleSubmit}>
-                    <button type="submit" className="button">
-                        <span className="button-label">Search</span>
-                    </button>
+            <Header className="Header">
+                <Form className="form" onSubmit={this.onHandleSubmit}>
+                    <Button type="submit" className="button">
+                        <ButtonLabel className="button-label">Search</ButtonLabel>Search
+                    </Button>
 
-                    <input
+                    <Input
                         className="input"
                         type="text"
                         autoComplete="off"
@@ -41,8 +43,8 @@ export class Searchbar extends Component {
                         value={query}
                         onChange={this.onHandleInput}
                     />
-                </form>
-            </header>
+                </Form>
+            </Header>
         );
     }
 }
@@ -60,56 +62,3 @@ export class Searchbar extends Component {
 
 
 
-
-
-
-
-
-
-// import LoadMoreBtn from "components/Button/Button";
-// import { Component } from "react";
-// import { toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
-
-
-// export default class Searchbar extends Component {
-//     state = {
-//         requestValue: '',
-//     };
-
-//     handleRequestChange = event => {
-//         this.setState({ requestValue: event.currentTarget.value.toLowerCase() });
-//     };
-
-
-//     handleSubmit = event => {
-//         event.preventDefault();
-
-//         if (this.state.requestValue.trim() === '') {
-//             toast("EROR!");
-//             return;
-//         };
-
-//         this.props.onSubmit(this.state.requestValue);
-//         this.setState({ requestValue: '' });
-//     };
-
-
-//     render() {
-//         return (
-//             <header className="searchbar">
-//                 <form onSubmit={this.handleSubmit}>
-//                     <input
-//                         type="text"
-//                     name="request"
-//                     autoComplete="off"
-//                     placeholder="Search images and photos"
-//                         value={this.state.requestValue}
-//                         onChange={this.handleRequestChange}
-//                     />
-//                         <button type="submit">Search</button>
-//                 </form>
-//            </header> 
-//         )
-//     }
-// }
