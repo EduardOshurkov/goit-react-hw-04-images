@@ -8,7 +8,7 @@ import ImageGalleryItem from "components/ImageGalleryItem/ImageGalleryItem";
 
   return (<>
     <Gallery className="ImageGallery">
-          {images?.map(item => (<ImageGalleryItem key={item.id} item={item} onClickModal={onImgClick}/>)
+          {images.map(({ id, webformatURL, largeImageURL, tags }) => (<ImageGalleryItem key={id} webformatURL={webformatURL} largeImageURL={largeImageURL} tags={tags} onClickModal={onImgClick}/>)
       )}
 </Gallery></>
   )

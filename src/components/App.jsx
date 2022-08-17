@@ -1,4 +1,4 @@
-import {Component} from "react";
+import {useState, useEffect} from "react";
 import Container from "./App.styled";
 import { Searchbar } from "./Searchbar/Searchbar";
 import * as api from './api/api';
@@ -9,102 +9,80 @@ import Modal from "./Modal/Modal";
 
 
 
-export class App extends Component {
-    state = {
-        query: '',
-        page: 1,
-        images: [],
-        isLoading: false,
-        isEmpty: false,
-        showModal: false,
-        ModalContent: null,
-    }
+export default function App () {
+    const [query, setQuery] = useState('');
+    const [page, setPage] = useState(1);
+    const [images, setImages] = useState([]);
+    const [isLoading, setLoading] = useState(false);
+    const [isEmpty, setEmpty] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [modalContent, setModalContent] = useState(null);
 
 
-    onClickCard = (event) => {
-        this.setState({
-            ModalContent: event.target.dataset.id
-        })
-    }
+    // const onClickCard = (event) => {
+    // modalContent: event.target.dataset.id
+    // }
 
-    componentDidUpdate(_, prevState) {
-        const { query, page } = this.state;
-        if (prevState.query !== query || prevState.page !== page) {
-            this.getImages(query, page)
+    useEffect(() => {
+        if (!query || !page) {
+            return;
         }
-    }
+        getImages(query, page);
+    }, [query, page]);
+
     
-    getImages = async (query, page) => {
-        this.setState({
-            isLoading: true,
-        })
+    const getImages = async (query, page) => {
+        setLoading(true);
         try {
-            const { hits } = await api.getImages(query, page);
+            const { hits } = await api.imagesService(query, page);
             if (hits.length === 0) {
-                this.setState({
+                setEmpty({
                     isEmpty: true,
                 })
             }
-            this.setState(prevState => ({
-                images: [...prevState.images, ...hits],
-            }))
+            setImages([...images, ...hits]);
         } catch (error) {
             console.error(error);
-            this.setState({
-                error: error.message 
-            })
-            
         } finally {
-            this.setState({
-                isLoading: false,
-            })
+            setLoading(false);
         }
 
-    }
+    };
 
-    onHandleSubmit = (value) => {
-        if (value === this.state.query) {
+    const onHandleSubmit = value => {
+        if (value === query) {
             return;
         }
-        this.setState({
-            query: value,
-            page: 1,
-            images: [],
-            isVisible: false,
-            isEmpty: false,
-            error: null,
-        })
+            setQuery (value);
+            setPage (1);
+            setImages ([]);
+            setEmpty(false);
+     
     };
 
-    onLoadMore = () => {
-        this.setState(prevState => ({
-            page: prevState.page + 1
-        }))
-    }
-
-    togleModal = (image) => {
-        this.setState(({ showModal }) => ({
-            showModal: !showModal,
-            ModalContent: image
-        }));
+    const onLoadMore = () => {
+        setPage(prevPage => prevPage + 1)
     };
 
-    render() {
-        const { images, isEmpty, isLoading, page, showModal, ModalContent } = this.state;
+    const togleModal = (image) => {
+        setShowModal(!showModal);
+        setModalContent(image)
+    };
 
+  
         const isNotLastPage = images.length / page === 12;
-        const btnEnable = images.length > 0 && !isLoading && isNotLastPage;
+    const btnEnable = images.length > 0 && !isLoading && isNotLastPage;
+    
         return (
             <Container>
-                <Searchbar onSubmit={this.onHandleSubmit} />
+                <Searchbar onSubmit={onHandleSubmit} />
                 {isEmpty && <h1>Sory no images, try again</h1>}
-                <ImageGallery images={images} onImgClick={this.togleModal}/>
-                {btnEnable && <LoadMoreBtn onLoadMore={this.onLoadMore} />}
+                <ImageGallery images={images} onImgClick={togleModal}/>
+                {btnEnable && <LoadMoreBtn onLoadMore={onLoadMore} />}
                 {isLoading && <Loader />}
-                {showModal && (<Modal onClose={this.togleModal}><img src={ModalContent} alt={images} /></Modal>)}
+                {showModal && (<Modal onClose={togleModal}><img src={modalContent} alt={images} /></Modal>)}
             </Container>
         )
-    }
 }
 
 
